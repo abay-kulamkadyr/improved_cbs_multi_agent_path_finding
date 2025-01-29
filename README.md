@@ -52,7 +52,7 @@ Run experiments using the run_experiments.py script with appropriate arguments.
 Command Syntax
 
     ```bash
-    python run_experiments.py --instance <instance_file> --solver <solver_type> --h <heuristic_type> --r <repeats> [--disjoint]
+        python3 run_experiments.py --instance <instance_file> --solver <solver_type> --h <heuristic_type> --r <repeats> [--disjoint]
     ```
 Arguments
 
@@ -72,21 +72,6 @@ Heuristic Options (--h)
 Example
 
 python run_experiments.py --instance instances/test_47.txt --solver ICBS --h 2 --r 1 --disjoint
-
-This command runs the ICBS solver on test_47.txt using the Dependency Graph heuristic, executes the experiment once, and employs disjoint splitting for collision resolution.
-Experimental Results
-Experiment 1: Standard Splitting
-Heuristic	Running Time (s)	Expanded Nodes	Generated Nodes	Average h-values
-h=0	17.72	2966	5931	0.00
-h=1	12.28	1952	3903	0.10
-h=2	0.25	36	71	3.20
-h=3	0.99	16	31	0.61
-Experiment 2: Disjoint Splitting
-Heuristic	Running Time (s)	Expanded Nodes	Generated Nodes	Average h-values
-h=0	6.22	655.15	1104.05	0.00
-h=1	4.66	464.45	818.65	0.17
-h=2	0.49	35.9	64.35	3.19
-h=3	1.70	30.45	53.65	0.35
 
 Summary
 
