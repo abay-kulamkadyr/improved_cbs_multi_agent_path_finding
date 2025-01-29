@@ -78,42 +78,6 @@ Summary
     Heuristic Efficiency: h=0 ≤ h(CG) ≤ h(DG) ≤ h(WDG). Better heuristics reduce the number of nodes expanded and generated.
     WDG Performance: Although more computationally intensive per node, WDG performs exceptionally well on larger input maps.
 
-Project Structure
-
-improved_cbs_multi_agent_path_finding/
-├── src/
-│   ├── cbs.py
-│   ├── cbs_utilities.py
-│   ├── common_for_search.py
-│   ├── icbs.py
-│   ├── mdd.py
-│   ├── minimumVertexCover.py
-│   ├── minimumWeightedVertexCover.py
-│   ├── results.py
-│   ├── run_experiments.py
-│   ├── single_agent_planner.py
-│   └── visualize.py
-├── custominstances/
-│   ├── experiment1.txt
-│   ├── experiment2.txt
-│   ├── test0.txt
-│   ├── test2.txt
-│   └── wdg_test.txt
-├── instances/
-│   ├── PaxHeaders.1451/
-│   │   ├── exp0.txt
-│   │   ├── exp1.txt
-│   │   ├── exp2_1.txt
-│   │   ├── exp2_2.txt
-│   │   ├── exp2_3.txt
-│   │   ├── exp4.txt
-│   │   ├── min-sum-of-cost.csv
-│   │   ├── test_1.txt
-│   │   ├── ... (other test files)
-│   └── ... (other instance folders)
-├── README.md
-└── LICENSE
-
 Resources
 
 This project is based on the following research:
