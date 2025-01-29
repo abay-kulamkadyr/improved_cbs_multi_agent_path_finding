@@ -46,19 +46,6 @@ The **Improved Conflict-Based Search (ICBS)** project offers an optimal solution
   - `matplotlib`
   - `numpy`
 
-### Steps
-
-1. **Clone the Repository**
-   ```bash
-   git clone https://github.com/yourusername/improved_cbs_multi_agent_path_finding.git
-   cd improved_cbs_multi_agent_path_finding/code
-   ```
-2. **Install Dependencies**
-
-pip install -r requirements.txt
-    ```bash
-    pip install matplotlib numpy
-    ```
 ### Usage
 
 Run experiments using the run_experiments.py script with appropriate arguments.
