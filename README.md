@@ -8,10 +8,6 @@
 - [Installation](#installation)
 - [Usage](#usage)
 - [Experimental Results](#experimental-results)
-- [Project Structure](#project-structure)
-- [Resources](#resources)
-- [Contact](#contact)
-- [License](#license)
 
 ## Overview
 
