@@ -7,7 +7,6 @@
 - [Collision Resolution Strategies](#collision-resolution-strategies)
 - [Installation](#installation)
 - [Usage](#usage)
-- [Experimental Results](#experimental-results)
 
 ## Overview
 
