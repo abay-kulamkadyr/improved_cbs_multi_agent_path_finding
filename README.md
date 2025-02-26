@@ -40,16 +40,15 @@ The **Improved Conflict-Based Search (ICBS)** project offers an optimal solution
 - **Python 3.6+**
 - **Required Libraries**:
   - `matplotlib`
-  - `numpy`
 
 ### Usage
 
 Run experiments using the run_experiments.py script with appropriate arguments.
 Command Syntax
 
-    ```bash
-        python3 run_experiments.py --instance <instance_file> --solver <solver_type> --h <heuristic_type> --r <repeats> [--disjoint]
-    ```
+```bash
+    python3 run_experiments.py --instance <instance_file> --solver <solver_type> --h <heuristic_type> --r <repeats> [--disjoint]
+```
 Arguments
 
     --instance: Path to the input map instance file.
