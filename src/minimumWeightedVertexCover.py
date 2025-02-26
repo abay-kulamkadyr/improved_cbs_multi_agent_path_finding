@@ -2,7 +2,8 @@ import sys
 from queue import Queue
 from minimumVertexCover import greedyMatching
 
-MAX_COST = sys.maxsize/2
+MAX_COST = sys.maxsize / 2
+
 
 def minimumWeightedVertexCover(HG, num_of_agents):
     rst = weightedVertexCover(HG, num_of_agents)
@@ -43,18 +44,22 @@ def weightedVertexCover(CG, num_of_agents):
                 k += 1
             num += 1
         if num == 1:
-            i+=1
-            continue
-        elif num == 2:
-            rst += max(CG[indices[0] * num_of_agents + indices[1]],
-                       CG[indices[1] * num_of_agents + indices[0]])
             i += 1
             continue
-        G = [0] * (num*num)
+        elif num == 2:
+            rst += max(
+                CG[indices[0] * num_of_agents + indices[1]],
+                CG[indices[1] * num_of_agents + indices[0]],
+            )
+            i += 1
+            continue
+        G = [0] * (num * num)
         for j in range(0, num):
             for k in range(j + 1, num):
-                G[j * num + k] = max(CG[indices[j] * num_of_agents + indices[k]],
-                                     CG[indices[k] * num_of_agents + indices[j]])
+                G[j * num + k] = max(
+                    CG[indices[j] * num_of_agents + indices[k]],
+                    CG[indices[k] * num_of_agents + indices[j]],
+                )
         if num > 8:
             rst += greedyMatching(G, len(range_list))
         else:
@@ -63,6 +68,7 @@ def weightedVertexCover(CG, num_of_agents):
             rst += DPForWMVC(x, 0, 0, G, range_list, best_so_far)
         i += 1
     return rst
+
 
 def DPForWMVC(x, i, sum_costs, CG, range_list, best_so_far):
     if sum_costs >= best_so_far:

@@ -8,6 +8,7 @@ class Results(object):
         self.expanded = 0
         self.generated = 0
         self.h_ave = 0
+
     def addValues(self, cpu_time, expanded, generated, h_ave):
         self.cpu_time += cpu_time
         self.expanded += expanded
@@ -19,7 +20,7 @@ class Results(object):
         print("Expanded nodes: ", self.expanded)
         print("Generated nodes: ", self.generated)
         print("------------------")
-        print("Average time: ", self.cpu_time/num_of_experiments)
-        print("Average expanded nodes: ", self.expanded/num_of_experiments)
-        print("Average generated nodes: ", self.generated/num_of_experiments)
-        print("Average h-values: ", self.h_ave/num_of_experiments)
+        print("Average time: ", self.cpu_time / num_of_experiments)
+        print("Average expanded nodes: ", self.expanded / num_of_experiments)
+        print("Average generated nodes: ", self.generated / num_of_experiments)
+        print("Average h-values: ", self.h_ave / num_of_experiments)

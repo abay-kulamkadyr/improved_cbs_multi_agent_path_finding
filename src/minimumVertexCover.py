@@ -1,61 +1,68 @@
 from queue import Queue
-def minimumVertexCoverHelper(CG, num_of_agents):
-        rst = 0
-        done = [False] * num_of_agents
-        i = 0
-        while i < num_of_agents:
-            if done[i]:
-                i+=1
-                continue
-            indices = []
-            Q = Queue()
-            Q.put(i)
-            done[i] = True
-            while not Q.empty():
-                j = Q.get()
-                indices.append(j)
-                k = 0
-                while k < num_of_agents:
-                    if CG[j * num_of_agents + k] > 0:
-                        if not done[k]:
-                            Q.put(k)
-                            done[k] = True
-                    elif CG[k * num_of_agents + j] > 0:
-                        if not done[k]:
-                            Q.put(k)
-                            done[k] = True
-                    k += 1
-            if len(indices) == 1:
-                i+=1
-                continue
-            elif len(indices) == 2:
-                rst += 1
-                i+=1
-                continue
 
-            subgraph = [0] * (len(indices) * len(indices))
-            num_edges = 0
-            j = 0
-            while j < len(indices):
-                k = j + 1
-                while k < len(indices):
-                    subgraph[j * len(indices) + k] = CG[indices[j] * num_of_agents + indices[k]]
-                    subgraph[k * len(indices) + j] = CG[indices[k] * num_of_agents + indices[j]]
-                    if subgraph[j * len(indices) + k] > 0:
-                        num_edges += 1
-                    k += 1
-                j += 1
-            if len(indices) > 8:
-                rst += greedyMatching(subgraph, len(indices))
-            else:
-                i = 1
-                while i < len(indices):
-                    if KVertexCover(subgraph, len(indices), num_edges, i, len(indices)):
-                        rst += i
-                        break
-                    i += 1
+
+def minimumVertexCoverHelper(CG, num_of_agents):
+    rst = 0
+    done = [False] * num_of_agents
+    i = 0
+    while i < num_of_agents:
+        if done[i]:
             i += 1
-        return rst
+            continue
+        indices = []
+        Q = Queue()
+        Q.put(i)
+        done[i] = True
+        while not Q.empty():
+            j = Q.get()
+            indices.append(j)
+            k = 0
+            while k < num_of_agents:
+                if CG[j * num_of_agents + k] > 0:
+                    if not done[k]:
+                        Q.put(k)
+                        done[k] = True
+                elif CG[k * num_of_agents + j] > 0:
+                    if not done[k]:
+                        Q.put(k)
+                        done[k] = True
+                k += 1
+        if len(indices) == 1:
+            i += 1
+            continue
+        elif len(indices) == 2:
+            rst += 1
+            i += 1
+            continue
+
+        subgraph = [0] * (len(indices) * len(indices))
+        num_edges = 0
+        j = 0
+        while j < len(indices):
+            k = j + 1
+            while k < len(indices):
+                subgraph[j * len(indices) + k] = CG[
+                    indices[j] * num_of_agents + indices[k]
+                ]
+                subgraph[k * len(indices) + j] = CG[
+                    indices[k] * num_of_agents + indices[j]
+                ]
+                if subgraph[j * len(indices) + k] > 0:
+                    num_edges += 1
+                k += 1
+            j += 1
+        if len(indices) > 8:
+            rst += greedyMatching(subgraph, len(indices))
+        else:
+            i = 1
+            while i < len(indices):
+                if KVertexCover(subgraph, len(indices), num_edges, i, len(indices)):
+                    rst += i
+                    break
+                i += 1
+        i += 1
+    return rst
+
 
 def minimumVertexCover(CG, old_mvc, cols, num_of_CGedges):
     assert old_mvc >= 0
@@ -79,6 +86,7 @@ def minimumVertexCover(CG, old_mvc, cols, num_of_CGedges):
             rst = old_mvc + 1
     return rst
 
+
 def greedyMatching(CG, cols):
     rst = 0
     used = [False] * cols
@@ -101,6 +109,7 @@ def greedyMatching(CG, cols):
         rst += maxWeight
         used[ep1] = True
         used[ep2] = True
+
 
 def KVertexCover(CG, num_of_CGnodes, num_of_CGedges, k, cols):
     if num_of_CGedges == 0:

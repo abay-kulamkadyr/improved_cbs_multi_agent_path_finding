@@ -1,10 +1,14 @@
-
 import time as timer
 import heapq
 
 from queue import Queue
 from single_agent_planner import compute_heuristics, a_star
-from cbs_utilities import detect_collisions, disjoint_splitting, standard_splitting, paths_violate_constraint
+from cbs_utilities import (
+    detect_collisions,
+    disjoint_splitting,
+    standard_splitting,
+    paths_violate_constraint,
+)
 from single_agent_planner import get_sum_of_cost
 
 
@@ -34,7 +38,10 @@ class CBSSolver(object):
             self.heuristics.append(compute_heuristics(my_map, goal))
 
     def push_node(self, node):
-        heapq.heappush(self.open_list, (node['cost'], len(node['collisions']), self.num_of_generated, node))
+        heapq.heappush(
+            self.open_list,
+            (node["cost"], len(node["collisions"]), self.num_of_generated, node),
+        )
         print("Generate node {}".format(self.num_of_generated))
         self.num_of_generated += 1
 
@@ -45,25 +52,28 @@ class CBSSolver(object):
         return node
 
     def find_solution(self, disjoint=False):
-        """ Finds paths for all agents from their start locations to their goal locations
+        """Finds paths for all agents from their start locations to their goal locations
 
         disjoint    - use disjoint splitting or not
         """
 
         self.start_time = timer.time()
-        root = {'cost': 0,
-                'constraints': [],
-                'paths': [],
-                'collisions': []}
+        root = {"cost": 0, "constraints": [], "paths": [], "collisions": []}
         for i in range(self.num_of_agents):  # Find initial path for each agent
-            path = a_star(self.my_map, self.starts[i], self.goals[i], self.heuristics[i],
-                          i, root['constraints'])
+            path = a_star(
+                self.my_map,
+                self.starts[i],
+                self.goals[i],
+                self.heuristics[i],
+                i,
+                root["constraints"],
+            )
 
             if path is None:
-                raise BaseException('No solutions')
-            root['paths'].append(path)
-        root['cost'] = get_sum_of_cost(root['paths'])
-        root['collisions'] = detect_collisions(root['paths'])
+                raise BaseException("No solutions")
+            root["paths"].append(path)
+        root["cost"] = get_sum_of_cost(root["paths"])
+        root["collisions"] = detect_collisions(root["paths"])
         self.push_node(root)
 
         ##############################
@@ -74,66 +84,76 @@ class CBSSolver(object):
         #   3. Otherwise, choose the first collision and convert to a list of constraints (using your
         #      standard_splitting function). Add a new child node to your open list for each constraint
 
-        while (len(self.open_list) > 0):
+        while len(self.open_list) > 0:
 
             parent_node = self.pop_node()
-            if (len(parent_node['collisions']) == 0):  # if no collisions return paths
+            if len(parent_node["collisions"]) == 0:  # if no collisions return paths
                 # self.print_results(parent_node)
                 CPU_time = timer.time() - self.start_time
-                return CPU_time, self.num_of_expanded, self.num_of_generated, parent_node['paths']
+                return (
+                    CPU_time,
+                    self.num_of_expanded,
+                    self.num_of_generated,
+                    parent_node["paths"],
+                )
 
-            collision = parent_node['collisions'][0]  # take one collision
-            constraints = constraints = disjoint_splitting(collision) if disjoint else standard_splitting(collision)
+            collision = parent_node["collisions"][0]  # take one collision
+            constraints = constraints = (
+                disjoint_splitting(collision)
+                if disjoint
+                else standard_splitting(collision)
+            )
 
             for constraint in constraints:
                 # create an empty node Q
 
-                Q = {
-                    'cost': 0,
-                    'constraints': [],
-                    'paths': [],
-                    'collisions': []
-                }
+                Q = {"cost": 0, "constraints": [], "paths": [], "collisions": []}
 
                 # Copy all constraints from the parent node and add additional constraint
-                Q['constraints'] = parent_node['constraints'].copy()  # deep copy
-                Q['constraints'].append(constraint)
-                Q['paths'] = parent_node['paths'].copy()
+                Q["constraints"] = parent_node["constraints"].copy()  # deep copy
+                Q["constraints"].append(constraint)
+                Q["paths"] = parent_node["paths"].copy()
 
-                ai = constraint['agent']
+                ai = constraint["agent"]
 
                 # build new path with the new constraint
-                path = a_star(my_map=self.my_map,
-                              start_loc=self.starts[ai],
-                              goal_loc=self.goals[ai],
-                              h_values=self.heuristics[ai],
-                              agent=ai,
-                              constraints=Q['constraints'])
+                path = a_star(
+                    my_map=self.my_map,
+                    start_loc=self.starts[ai],
+                    goal_loc=self.goals[ai],
+                    h_values=self.heuristics[ai],
+                    agent=ai,
+                    constraints=Q["constraints"],
+                )
                 is_path_found = True
 
-                if (path is not None):
-                    if (constraint['positive']):
-                        broken_agents_paths = paths_violate_constraint(parent_node['paths'], constraint)
+                if path is not None:
+                    if constraint["positive"]:
+                        broken_agents_paths = paths_violate_constraint(
+                            parent_node["paths"], constraint
+                        )
                         for agent in broken_agents_paths:
 
                             # generate new path for the broken agent's paths
-                            updated_path = a_star(my_map=self.my_map,
-                                                  start_loc=self.starts[agent],
-                                                  goal_loc=self.goals[agent],
-                                                  h_values=self.heuristics[agent],
-                                                  agent=agent,
-                                                  constraints=Q['constraints'])
+                            updated_path = a_star(
+                                my_map=self.my_map,
+                                start_loc=self.starts[agent],
+                                goal_loc=self.goals[agent],
+                                h_values=self.heuristics[agent],
+                                agent=agent,
+                                constraints=Q["constraints"],
+                            )
                             # break if updated path doesn't exist
-                            if (updated_path is None):
+                            if updated_path is None:
                                 is_path_found = False
                                 break
                             # else add the path to high-level node
-                            Q['paths'][agent] = updated_path
+                            Q["paths"][agent] = updated_path
 
-                    Q['paths'][ai] = path
-                    Q['collisions'] = detect_collisions(Q['paths'])
-                    Q['cost'] = get_sum_of_cost(Q['paths'])
-                    if (is_path_found == True):
+                    Q["paths"][ai] = path
+                    Q["collisions"] = detect_collisions(Q["paths"])
+                    Q["cost"] = get_sum_of_cost(Q["paths"])
+                    if is_path_found == True:
                         self.push_node(Q)
 
         return None, None, None, None
@@ -142,6 +162,6 @@ class CBSSolver(object):
         print("\n Found a solution! \n")
         CPU_time = timer.time() - self.start_time
         print("CPU time (s):    {:.2f}".format(CPU_time))
-        print("Sum of costs:    {}".format(get_sum_of_cost(node['paths'])))
+        print("Sum of costs:    {}".format(get_sum_of_cost(node["paths"])))
         print("Expanded nodes:  {}".format(self.num_of_expanded))
         print("Generated nodes: {}".format(self.num_of_generated))
